@@ -62,8 +62,4 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function address()
-    {
-        return $this->hasOne(Address::class);
-    }
 }
