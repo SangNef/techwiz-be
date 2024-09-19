@@ -15,8 +15,11 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('trip_id');
+            $table->foreign('trip_id')->references('id')->on('trips');
             $table->string('name');
-            $table->timestamp('deleted_at')->nullable();
+            $table->decimal('budget', 15, 3);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

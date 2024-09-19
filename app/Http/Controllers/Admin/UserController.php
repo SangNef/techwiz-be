@@ -14,4 +14,16 @@ class UserController extends Controller
         $users = User::all();
         return view('pages.users.index', compact('users'));
     }
+    
+    public function update($id)
+    {
+        $user = User::find($id);
+        if($user->deleted_at == null){
+            $user->deleted_at = now();
+        }else{
+            $user->deleted_at = null;
+        }
+        $user->save();
+        return redirect()->back()->with('success', 'User status updated successfully');
+    }
 }

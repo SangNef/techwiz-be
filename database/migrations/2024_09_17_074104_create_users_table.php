@@ -19,8 +19,10 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('avatar')->nullable();
-            $table->string('currency_code', 3)->default('VND');
-            $table->timestamp('deleted_at')->nullable();
+            $table->unsignedBigInteger('currency_id')->default(1);
+            $table->foreign('currency_id')->references('id')->on('currencies');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

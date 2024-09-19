@@ -12,7 +12,7 @@
         <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
             <thead class="bg-gray-100 border-b border-gray-200">
                 <tr>
-                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Stt</th>
+                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">No</th>
                     <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Name</th>
                     <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Email</th>
                     <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Status</th>
@@ -27,15 +27,19 @@
                         <td class="py-2 px-4 text-sm text-gray-700">{{ $user->name }}</td>
                         <td class="py-2 px-4 text-sm text-gray-700">{{ $user->email }}</td>
                         @if ($user->deleted_at === null)
-                            <td class="py-2 px-4 text-sm text-gray-700">Active</td>
+                            <td class="py-2 px-4 text-sm"><span class="bg-green-200 text-green-600 px-1 rounded">Active</span></td>
                         @else
-                            <td class="py-2 px-4 text-sm text-gray-700">Banned</td>
+                            <td class="py-2 px-4 text-sm"><span class="bg-red-200 text-red-600 px-1 rounded">Banned</span></td>
                         @endif
                         <td class="py-2 px-4 text-sm text-gray-700">{{ $user->created_at->format('d/m/Y') }}</td>
                         <td class="py-2 px-4 text-sm text-gray-700">
-                            <a href="{{ route('admin.user.update', $user->id) }}" class="text-blue-500 hover:text-blue-700">
-                                {{ $user->deleted_at === null ? 'Ban' : 'Unban' }}
-                            </a>
+                            <form action="{{ route('user.update', $user->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="bg-red-200 text-red-600 px-1 rounded">
+                                    {{ $user->deleted_at === null ? 'Ban' : 'Unban' }}
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty
