@@ -18,7 +18,7 @@ class CreateSchedulesTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->string('title');
-            $table->date('day');
+            $table->unsignedTinyInteger('day');
             $table->time('time');
             $table->decimal('amount', 15, 3);
             $table->date('expense_date')->nullable();
