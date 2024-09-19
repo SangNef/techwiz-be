@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
+use App\Http\Controllers\Admin\SampleCategoryController;
 use App\Http\Controllers\Admin\TripController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -34,14 +35,13 @@ Route::post('/destinations', [DestinationController::class, 'store'])->name('des
 Route::put('/destinations/{id}', [DestinationController::class, 'update'])->name('destination.update');
 Route::delete('/destinations/{id}', [DestinationController::class, 'destroy'])->name('destination.destroy');
 
-// Categories
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
-Route::post('/categories', [CategoryController::class, 'store'])->name('category.store');
-Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('category.update');
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
-
 // Currencies
 Route::get('/currencies', [CurrencyController::class, 'index'])->name('currencies');
 Route::post('/currencies', [CurrencyController::class, 'store'])->name('currency.store');
 Route::put('/currencies/{id}', [CurrencyController::class, 'update'])->name('currency.update');
 Route::delete('/currencies/{id}', [CurrencyController::class, 'destroy'])->name('currency.destroy');
+
+// Sample Categories
+Route::get('/categories', [SampleCategoryController::class, 'index'])->name('sample');
+Route::get('/categories/create', [SampleCategoryController::class, 'create'])->name('sample.create');
+Route::post('/categories', [SampleCategoryController::class, 'store'])->name('sample.store');
