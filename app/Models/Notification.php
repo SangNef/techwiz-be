@@ -11,22 +11,11 @@ class Notification extends Model
 
     protected $table = 'notifications';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'user_id',
-        'title',
-        'content',
-    ];
+    protected $fillable = ['user_id', 'title', 'content', 'read_at'];
 
-    /**
-     * Get the user associated with the notification.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
 }

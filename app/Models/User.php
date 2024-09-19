@@ -16,7 +16,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'avatar', 'currency_code'];
+    protected $fillable = ['name', 'email', 'password', 'avatar', 'currency_code', 'email_verified_at'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -62,8 +62,4 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function address()
-    {
-        return $this->hasOne(Address::class);
-    }
 }
