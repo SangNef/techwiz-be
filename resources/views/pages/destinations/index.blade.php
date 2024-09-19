@@ -8,42 +8,46 @@
         </button>
     </div>
 
-    {{-- error any --}}
-
-    @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li><span class="block sm:inline">{{ $error }}</span></li>
-                @endforeach
-            </ul>
+    @if (session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 px-4 py-3 mb-4" role="alert">
+            <p>{{ session('success') }}</p>
         </div>
     @endif
 
-    <div>
+    @if ($errors->any())
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 px-4 py-3 mb-4" role="alert">
+            @foreach ($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+
+    <div class="w-full bg-white rounded-lg shadow p-6 relative">
         @php
             $stt = 1;
         @endphp
 
-        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-            <thead class="border-b border-gray-200">
-                <tr>
-                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">No</th>
-                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Name</th>
-                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Image</th>
-                    <th class="py-2 px-4 text-left text-sm font-medium text-gray-700">Action</th>
+        <table class="w-full border-gray-300 mt-4">
+            <thead class="bg-gray-100 border-b border-gray-200">
+                <tr class="">
+                    <th class="p-2 border-b text-start">No</th>
+                    <th class="p-2 border-b text-start">Name</th>
+                    <th class="p-2 border-b text-start">Description</th>
+                    <th class="p-2 border-b text-start">Image</th>
+                    <th class="p-2 border-b text-start">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($destinations as $destination)
-                    <tr class="border-b hover:bg-slate-200 duration-150">
-                        <td class="py-2 px-4 text-sm text-gray-700">{{ $stt++ }}</td>
-                        <td class="py-2 px-4 text-sm text-gray-700">{{ $destination->name }}</td>
-                        <td class="py-2 px-4 text-sm text-gray-700">
+                    <tr class="hover:bg-gray-100 even:bg-gray-200 border-b duration-150 text-sm leading-5 font-normal text-gray-500">
+                        <td class="p-2">{{ $stt++ }}</td>
+                        <td class="p-2">{{ $destination->name }}</td>
+                        <td class="p-2">{{ $destination->description }}</td>
+                        <td class="p-2">
                             <img src="{{ asset('images/destinations/' . $destination->images->first()->image) }}"
                                 alt="{{ $destination->name }}" class="h-16 object-cover rounded">
                         </td>
-                        <td class="py-2 px-4 text-sm text-gray-700 h-full flex gap-2 items-center">
+                        <td class="p-2 h-full flex gap-2 items-center">
                             <button
                                 class="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600 transition duration-150 ease-in-out shadow-md hover:shadow-lg editBtn"
                                 data-id="{{ $destination->id }}" data-name="{{ $destination->name }}"
@@ -63,7 +67,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="py-2 px-4 text-sm text-gray-700 text-center">No Data.</td>
+                        <td colspan="7" class="p-2 text-center">No Data.</td>
                     </tr>
                 @endforelse
             </tbody>

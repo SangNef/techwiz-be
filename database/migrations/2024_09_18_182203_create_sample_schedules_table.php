@@ -18,9 +18,8 @@ class CreateSampleSchedulesTable extends Migration
             $table->unsignedBigInteger('sample_category_id');
             $table->foreign('sample_category_id')->references('id')->on('sample_categories');
             $table->string('title');
-            $table->date('day');
+            $table->unsignedTinyInteger('day');
             $table->time('time');
-            $table->decimal('amount', 15, 3);
             $table->softDeletes();
             $table->timestamps();
         });

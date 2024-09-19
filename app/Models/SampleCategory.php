@@ -11,5 +11,15 @@ class SampleCategory extends Model
 
     protected $table = 'sample_categories';
 
-    protected $fillable = ['name', 'budget'];
+    protected $fillable = ['sample_id', 'name', 'budget'];
+
+    public function schedules()
+    {
+        return $this->hasMany(SampleSchedule::class);
+    }
+
+    public function sample()
+    {
+        return $this->belongsTo(Sample::class);
+    }
 }
