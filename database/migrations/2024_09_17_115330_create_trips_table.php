@@ -17,7 +17,7 @@ class CreateTripsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('destination_id');
+            $table->unsignedBigInteger('destination_id')->nullable();
             $table->foreign('destination_id')->references('id')->on('destinations');
             $table->string('name');
             $table->date('start_date');
