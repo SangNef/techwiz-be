@@ -10,11 +10,18 @@ use Illuminate\Support\Facades\DB;
 class DestinationController extends Controller
 {
     //
-    public function getTopDestinations()
+    public function getDestination()
     {
-        $destinations = Destination::paginate(10);
+        $destinations = Destination::with('images')->paginate(10);
 
         return response()->json($destinations);
+    }
+
+    public function destinationDetail($id)
+    {
+        $destination = Destination::with('images')->find($id);
+
+        return response()->json($destination);
     }
 
 }
