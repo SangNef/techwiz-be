@@ -26,7 +26,18 @@
         @php
             $stt = 1;
         @endphp
-
+        <form method="GET" class="flex space-x-4 justify-between">
+            <select name="page_size" class="border-gray-300 rounded-lg">
+                <option value="10" {{ request('page_size') == 10 ? 'selected' : '' }}>10</option>
+                <option value="25" {{ request('page_size') == 25 ? 'selected' : '' }}>25</option>
+                <option value="50" {{ request('page_size') == 50 ? 'selected' : '' }}>50</option>
+            </select>
+            <div>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or email"
+                    class="border-gray-300 rounded-lg px-4 py-2">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Filter</button>
+            </div>
+        </form>
         <table class="w-full border-gray-300 mt-4">
             <thead class="bg-gray-100 border-b border-gray-200">
                 <tr>

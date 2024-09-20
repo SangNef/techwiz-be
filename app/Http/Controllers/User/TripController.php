@@ -27,12 +27,16 @@ class TripController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'budget' => 'required|numeric|min:0',
-            'title' => 'nullable|string|max:255',
-            'day' => 'nullable|integer|min:1|max:31',
-            'hour' => 'nullable|integer|min:0|max:23',
-            'amount' => 'nullable|numeric|min:0',
-            'expense_date' => 'nullable|date',
-            'note' => 'nullable|string',
+            'categories' => 'required|array', // Validate danh sách categories
+            'categories.*.name' => 'required|string|max:255',
+            'categories.*.budget' => 'required|numeric|min:0',
+            'categories.*.schedules' => 'required|array', // Validate danh sách schedules trong mỗi category
+            'categories.*.schedules.*.title' => 'nullable|string|max:255',
+            'categories.*.schedules.*.day' => 'nullable|integer|min:1|max:31',
+            'categories.*.schedules.*.hour' => 'nullable|integer|min:0|max:23',
+            'categories.*.schedules.*.amount' => 'nullable|numeric|min:0',
+            'categories.*.schedules.*.expense_date' => 'nullable|date',
+            'categories.*.schedules.*.note' => 'nullable|string',
         ]);
     
         if ($validator->fails()) {
@@ -50,23 +54,29 @@ class TripController extends Controller
         $trip->is_public = false;
         $trip->save();
     
-        $category = new Category();
-        $category->trip_id = $trip->id;
-        $category->name = $request->name;
-        $category->budget = $request->budget;
-        $category->save();
+        foreach ($request->categories as $categoryData) {
+            $category = new Category();
+            $category->trip_id = $trip->id;
+            $category->name = $categoryData['name'];
+            $category->budget = $categoryData['budget'];
+            $category->save();
     
-        $schedule = new Schedule();
-        $schedule->category_id = $category->id;
-        $schedule->title = $request->title;
-        $schedule->day = $request->day;
-        $schedule->time = $request->time;
-        $schedule->amount = $request->amount;
-        $schedule->expense_date = $request->expense_date;
-        $schedule->note = $request->note;
-        $schedule->save();
+            foreach ($categoryData['schedules'] as $scheduleData) {
+                $schedule = new Schedule();
+                $schedule->category_id = $category->id;
+                $schedule->title = $scheduleData['title'];
+                $schedule->day = $scheduleData['day'];
+                $schedule->time = $scheduleData['time'];
+                $schedule->amount = $scheduleData['amount'];
+                $schedule->expense_date = $scheduleData['expense_date'];
+                $schedule->note = $scheduleData['note'];
+                $schedule->save();
+            }
+        }
+    
         return response()->json(['message' => 'Trip created successfully'], 201);
     }
+    
     
 
     public function show($id)

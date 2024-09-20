@@ -16,15 +16,6 @@ class SampleCategoryController extends Controller
     public function index(Request $request)
     {
         $query = SampleCategory::query()->with('schedules');
-
-        if ($request->has('status')) {
-            if ($request->status == 'active') {
-                $query->whereNull('deleted_at');
-            } elseif ($request->status == 'banned') {
-                $query->whereNotNull('deleted_at');
-            }
-        }
-
         if ($request->has('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
@@ -60,7 +51,12 @@ class SampleCategoryController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+<<<<<<< HEAD
+        // Start a database transaction
+        DB::beginTransaction();
+=======
         \DB::beginTransaction();
+>>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
         try {
             $sample = new Sample();
             $sample->name = $request->input('name');
@@ -95,11 +91,21 @@ class SampleCategoryController extends Controller
                 }
             }
 
+<<<<<<< HEAD
+            // Commit the transaction
+            DB::commit();
+=======
             \DB::commit();
+>>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
 
             return redirect()->route('sample.index')->with('success', 'Sample and schedules created successfully.');
         } catch (\Exception $e) {
+<<<<<<< HEAD
+            // Rollback the transaction on error
+            DB::rollback();
+=======
             \DB::rollback();
+>>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
             return back()->withErrors(['error' => 'An error occurred while saving the data.']);
         }
     }
