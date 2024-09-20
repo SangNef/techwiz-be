@@ -12,13 +12,13 @@
                 class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Users Manager</a>
         </li>
         <li class="w-full hover:bg-pink-50 duration-150 py-2 hover:px-2 group"><a href="{{ route('destinations') }}"
-                class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Desstinations Manager</a>
-        </li>
-        <li class="w-full hover:bg-pink-50 duration-150 py-2 hover:px-2 group"><a href="{{ route('categories') }}"
-                class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Categories Manager</a>
+                class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Destinations Manager</a>
         </li>
         <li class="w-full hover:bg-pink-50 duration-150 py-2 hover:px-2 group"><a href="{{ route('currencies') }}"
                 class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Currencies Manager</a>
+        </li>
+        <li class="w-full hover:bg-pink-50 duration-150 py-2 hover:px-2 group"><a href="{{ route('sample') }}"
+                class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Samples Manager</a>
         </li>
     </ul>
 </div>
