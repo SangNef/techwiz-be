@@ -16,15 +16,6 @@ class SampleCategoryController extends Controller
     public function index(Request $request)
     {
         $query = SampleCategory::query()->with('schedules');
-
-        if ($request->has('status')) {
-            if ($request->status == 'active') {
-                $query->whereNull('deleted_at');
-            } elseif ($request->status == 'banned') {
-                $query->whereNotNull('deleted_at');
-            }
-        }
-
         if ($request->has('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
@@ -62,7 +53,7 @@ class SampleCategoryController extends Controller
         }
 
         // Start a database transaction
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
             // Create a new Sample
             $sample = new Sample();
@@ -104,13 +95,13 @@ class SampleCategoryController extends Controller
             }
 
             // Commit the transaction
-            \DB::commit();
+            DB::commit();
 
             // Redirect or return success response
             return redirect()->route('sample.index')->with('success', 'Sample and schedules created successfully.');
         } catch (\Exception $e) {
             // Rollback the transaction on error
-            \DB::rollback();
+            DB::rollback();
             return back()->withErrors(['error' => 'An error occurred while saving the data.']);
         }
     }
