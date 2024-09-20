@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\User\ConfigController;
+use App\Http\Controllers\User\DestinationController;
 use App\Http\Controllers\User\ExpenseController;
 use App\Http\Controllers\User\LinkController;
 use App\Http\Controllers\User\TripController;
@@ -20,12 +22,12 @@ use Illuminate\Support\Facades\Route;
 //User router
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
+Route::get('/activate', [UserController::class, 'activateAccount'])->name('user.activate');
 Route::get('/user', [UserController::class, 'profile']);
 Route::post('/user-update', [UserController::class, 'updateProfile']);
 Route::post('/forgot-password', [UserController::class, 'forgotPassword']);
 Route::post('/reset-password', [UserController::class, 'resetPassword']);
 Route::post('/logout', [UserController::class, 'logout']);
-Route::get('/activate', [UserController::class, 'activateAccount'])->name('user.activate');
 
 
 //Trip router
@@ -48,3 +50,6 @@ Route::post('/create-links', [LinkController::class, 'store']);
 Route::get('/show-links', [LinkController::class, 'show']);
 Route::put('/links-update', [LinkController::class, 'update']);
 Route::delete('/links-delete', [LinkController::class, 'destroy']);
+
+//Config router
+Route::get('/home-screen', [ConfigController::class, 'getHomeScreen']);

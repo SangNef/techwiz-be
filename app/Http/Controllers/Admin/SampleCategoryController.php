@@ -38,7 +38,6 @@ class SampleCategoryController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:samples,name',
             'category_name.*' => 'required|string|max:255',
@@ -52,38 +51,36 @@ class SampleCategoryController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+<<<<<<< HEAD
         // Start a database transaction
         DB::beginTransaction();
+=======
+        \DB::beginTransaction();
+>>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
         try {
-            // Create a new Sample
             $sample = new Sample();
             $sample->name = $request->input('name');
             $sample->save();
 
-            // Get the categories and budgets
             $categoryNames = $request->input('category_name');
             $categoryBudgets = $request->input('category_budget');
             $scheduleTitles = $request->input('schedule_title');
             $scheduleDays = $request->input('schedule_day');
             $scheduleTimes = $request->input('schedule_time');
 
-            // Loop through each category and save it
             foreach ($categoryNames as $index => $categoryName) {
-                // Create a new SampleCategory
                 $category = new SampleCategory();
                 $category->name = $categoryName;
                 $category->budget = $categoryBudgets[$index];
                 $category->sample_id = $sample->id;
                 $category->save();
 
-                // Get the schedules for this category
                 $titles = $scheduleTitles[$index] ?? [];
                 $days = $scheduleDays[$index] ?? [];
                 $times = $scheduleTimes[$index] ?? [];
 
                 foreach ($titles as $i => $title) {
-                    if ($title) { // Ensure the title is not empty
-                        // Create a new SampleSchedule
+                    if ($title) { 
                         $schedule = new SampleSchedule();
                         $schedule->sample_category_id = $category->id;
                         $schedule->title = $title;
@@ -94,14 +91,21 @@ class SampleCategoryController extends Controller
                 }
             }
 
+<<<<<<< HEAD
             // Commit the transaction
             DB::commit();
+=======
+            \DB::commit();
+>>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
 
-            // Redirect or return success response
             return redirect()->route('sample.index')->with('success', 'Sample and schedules created successfully.');
         } catch (\Exception $e) {
+<<<<<<< HEAD
             // Rollback the transaction on error
             DB::rollback();
+=======
+            \DB::rollback();
+>>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
             return back()->withErrors(['error' => 'An error occurred while saving the data.']);
         }
     }

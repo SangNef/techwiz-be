@@ -28,6 +28,10 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        if ($user->email_verified_at == null) {
+            return response()->json(['error' => 'Account not activated'], 404);
+        }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
@@ -97,7 +101,7 @@ class UserController extends Controller
         // Remove email from cache
         Cache::forget('user_activation_' . $email);
 
-        return response()->json(['message' => 'Account activated successfully'], 200);
+        return redirect(env('APP_FE_URL') . '/login');
     }
 
     public function profile(Request $request)
