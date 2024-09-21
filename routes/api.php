@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\User\ConfigController;
+
 use App\Http\Controllers\User\CurrencyController;
+
 use App\Http\Controllers\User\ContactController;
+
 use App\Http\Controllers\User\DestinationController;
 use App\Http\Controllers\User\ExpenseController;
 use App\Http\Controllers\User\LinkController;

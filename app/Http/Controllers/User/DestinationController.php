@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class DestinationController extends Controller
 {
-    public function getTopDestinations()
+    public function getDestination()
     {
         $destinations = Destination::with(['trips' => function ($query) {
             $query->where('is_completed', true);
-        }])->get();
+        }])->with('images')->get();
 
         $result = [];
 
