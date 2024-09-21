@@ -17,4 +17,9 @@ class Category extends Model
     {
         return $this->belongsTo(Trip::class);
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

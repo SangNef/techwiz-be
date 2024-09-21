@@ -23,5 +23,4 @@ class DestinationController extends Controller
 
         return response()->json($destination);
     }
-
 }

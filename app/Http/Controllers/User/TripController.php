@@ -18,7 +18,7 @@ class TripController extends Controller
         return response()->json($trips, 200);
     }
 
-    public function store(Request $request)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
@@ -28,56 +28,86 @@ class TripController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'budget' => 'required|numeric|min:0',
             'categories' => 'required|array', // Validate danh sách categories
+            'categories.*.id' => 'nullable|exists:categories,id', // Kiểm tra nếu có ID của category thì phải tồn tại
             'categories.*.name' => 'required|string|max:255',
             'categories.*.budget' => 'required|numeric|min:0',
             'categories.*.schedules' => 'required|array', // Validate danh sách schedules trong mỗi category
+            'categories.*.schedules.*.id' => 'nullable|exists:schedules,id', // Kiểm tra nếu có ID của schedule thì phải tồn tại
             'categories.*.schedules.*.title' => 'nullable|string|max:255',
             'categories.*.schedules.*.day' => 'nullable|integer|min:1|max:31',
-            'categories.*.schedules.*.hour' => 'nullable|integer|min:0|max:23',
+            'categories.*.schedules.*.hour' => 'nullable',
             'categories.*.schedules.*.amount' => 'nullable|numeric|min:0',
             'categories.*.schedules.*.expense_date' => 'nullable|date',
             'categories.*.schedules.*.note' => 'nullable|string',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-    
-        $trip = new Trip();
+
+        $trip = Trip::find($id);
+        if (!$trip) {
+            return response()->json(['message' => 'Trip not found'], 404);
+        }
+
         $trip->user_id = $request->user_id;
         $trip->destination_id = $request->destination_id;
         $trip->name = $request->name;
         $trip->start_date = $request->start_date;
         $trip->end_date = $request->end_date;
         $trip->budget = $request->budget;
-        $trip->is_completed = false;
-        $trip->is_public = false;
         $trip->save();
-    
+
+        $categoryIds = [];
         foreach ($request->categories as $categoryData) {
-            $category = new Category();
-            $category->trip_id = $trip->id;
-            $category->name = $categoryData['name'];
-            $category->budget = $categoryData['budget'];
-            $category->save();
-    
-            foreach ($categoryData['schedules'] as $scheduleData) {
-                $schedule = new Schedule();
-                $schedule->category_id = $category->id;
-                $schedule->title = $scheduleData['title'];
-                $schedule->day = $scheduleData['day'];
-                $schedule->time = $scheduleData['time'];
-                $schedule->amount = $scheduleData['amount'];
-                $schedule->expense_date = $scheduleData['expense_date'];
-                $schedule->note = $scheduleData['note'];
-                $schedule->save();
+            if (isset($categoryData['id'])) {
+                $category = Category::find($categoryData['id']);
+                if ($category) {
+                    $category->name = $categoryData['name'];
+                    $category->budget = $categoryData['budget'];
+                    $category->save();
+                }
+            } else {
+                $category = new Category();
+                $category->trip_id = $trip->id;
+                $category->name = $categoryData['name'];
+                $category->budget = $categoryData['budget'];
+                $category->save();
             }
+            $categoryIds[] = $category->id;
+
+            $scheduleIds = [];
+            foreach ($categoryData['schedules'] as $scheduleData) {
+                if (isset($scheduleData['id'])) {
+                    $schedule = Schedule::find($scheduleData['id']);
+                    if ($schedule) {
+                        $schedule->title = $scheduleData['title'];
+                        $schedule->day = $scheduleData['day'];
+                        $schedule->time = $scheduleData['hour'];
+                        $schedule->save();
+                    }
+                } else {
+                    $schedule = new Schedule();
+                    $schedule->category_id = $category->id;
+                    $schedule->title = $scheduleData['title'];
+                    $schedule->day = $scheduleData['day'];
+                    $schedule->time = $scheduleData['hour'];
+                    $schedule->save();
+                }
+                $scheduleIds[] = $schedule->id;
+            }
+
+            Schedule::where('category_id', $category->id)
+                ->whereNotIn('id', $scheduleIds)
+                ->delete();
         }
-    
-        return response()->json(['message' => 'Trip created successfully'], 201);
+
+        Category::where('trip_id', $trip->id)
+            ->whereNotIn('id', $categoryIds)
+            ->delete();
+
+        return response()->json(['message' => 'Trip updated successfully'], 200);
     }
-    
-    
 
     public function show($id)
     {
@@ -86,29 +116,6 @@ class TripController extends Controller
         if (!$trip) {
             return response()->json(['message' => 'Trip not found'], 404);
         }
-
-        return response()->json($trip, 200);
-    }
-
-    public function update(Request $request)
-    {
-        $trip_id = $request->trip_id;
-        $trip = Trip::find($trip_id);
-
-        if (!$trip) {
-            return response()->json(['message' => 'Trip not found'], 404);
-        }
-
-        $request->validate([
-            'destination_id' => 'exists:destinations,id',
-            'package_id' => 'exists:trip_packages,id',
-            'name' => 'string|max:255',
-            'start_date' => 'date',
-            'end_date' => 'date|after_or_equal:start_date',
-            'budget' => 'numeric|min:0',
-        ]);
-
-        $trip->update($request->all());
 
         return response()->json($trip, 200);
     }
@@ -125,5 +132,56 @@ class TripController extends Controller
 
         return response()->json(['message' => 'Trip deleted successfully'], 200);
     }
-    
+
+    public function getTripByUser(Request $request)
+    {
+        $user_id = $request->userId;
+
+        $trips = Trip::where('user_id', $user_id)
+            ->where('is_completed', false)
+            ->with(['destination', 'categories.schedules'])
+            ->get();
+
+        $tripData = $trips->map(function ($trip) {
+            $totalBudget = $trip->budget;
+
+            $totalAmount = $trip->categories->flatMap(function ($category) {
+                return $category->schedules;
+            })->sum('amount');
+
+            return [
+                'id' => $trip->id,
+                'trip_name' => $trip->name,
+                'destination_name' => $trip->destination ? $trip->destination->name : null,
+                'start_date' => $trip->start_date,
+                'end_date' => $trip->end_date,
+                'categories' => $trip->categories->pluck('name'),
+                'schedules' => $trip->categories->flatMap(function ($category) {
+                    return $category->schedules;
+                })->map(function ($schedule) {
+                    return [
+                        'name' => $schedule->category->name,
+                        'category_id' => $schedule->category_id,
+                        'title' => $schedule->title,
+                        'day' => $schedule->day,
+                        'time' => $schedule->time,
+                        'amount' => $schedule->amount,
+                        'expense_date' => $schedule->expense_date,
+                        'note' => $schedule->note,
+                    ];
+                }),
+                'total_budget' => number_format($totalBudget),
+                'total_amount' => number_format($totalAmount),
+            ];
+        });
+
+        return response()->json($tripData, 200);
+    }
+
+    public function tripDetail($id)
+    {
+        $trip = Trip::where('id', $id)->with(['destination', 'categories.schedules'])->first();
+
+        return response()->json($trip, 200);
+    }
 }

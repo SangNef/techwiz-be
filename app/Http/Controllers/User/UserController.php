@@ -28,11 +28,15 @@ class UserController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        if (!$user) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+
         if ($user->email_verified_at == null) {
             return response()->json(['error' => 'Account not activated'], 404);
         }
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!Hash::check($request->password, $user->password)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
@@ -40,6 +44,9 @@ class UserController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'id' => $user->id,
+            'avatar' => $user->avatar,
+            'currency_id' => $user->currency_id,
+            'currency_code' => $user->currency->code,
         ];
 
         try {
@@ -120,43 +127,39 @@ class UserController extends Controller
             return response()->json(['error' => 'User not found'], 404);
         }
 
-        $validator = Validator::make($request->all(), [
-            'email' => 'nullable|email|unique:users,email,' . $user->id,
-            'name' => 'nullable|string|max:255',
-            'password' => 'nullable|min:6',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'currency_code' => 'nullable|string|max:10',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+        // Update avatar if present
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
+            $avatar->move(public_path('images/users'), $avatarName);
+            $user->avatar = env('APP_URL') . '/images/users/' . $avatarName;
         }
-
-        if ($request->has('email') && $request->email != $user->email) {
-            $user->email = $request->email;
-        }
-
-        if ($request->has('name')) {
-            $user->name = $request->name;
+        elseif ($request->has('name') || $request->has('currency_id')) {
+            $user->name = $request->input('name', $user->name);  // Keep current name if not provided
+            $user->currency_id = $request->input('currency_id', $user->currency_id);  // Keep current currency if not provided
         }
 
         if ($request->has('password')) {
             $user->password = Hash::make($request->password);
         }
 
-        if ($request->has('currency_code')) {
-            $user->currency_code = $request->currency_code;
-        }
-
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $name = time() . '.' . $avatar->getClientOriginalExtension();
-            $user->avatar = $name;
-            $avatar->move(public_path('images/avatar'), $name);
-        }
         $user->save();
 
-        return response()->json(['success' => 'Profile updated successfully', 'user' => $user], 200);
+        $customClaims = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'id' => $user->id,
+            'avatar' => $user->avatar,
+            'currency_id' => $user->currency_id,
+            'currency_code' => $user->currency->code,
+        ];
+
+        $token = JWTAuth::customClaims($customClaims)->fromUser($user);
+
+        return response()->json([
+            'success' => 'Profile updated successfully',
+            'token' => $token,
+        ], 200);
     }
 
     public function logout()
@@ -182,7 +185,7 @@ class UserController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-        
+
         if (!$user) {
             return response()->json(['error' => 'Email does not exist in the system'], 404);
         }
@@ -237,7 +240,7 @@ class UserController extends Controller
         // Update user's password
         $user->password = Hash::make($request->password);
         $user->save();
-        
+
         // Remove reset code from cache after use
         Cache::forget('password_reset_' . $user->email);
         return response()->json(['message' => 'Password has been successfully updated'], 200);
