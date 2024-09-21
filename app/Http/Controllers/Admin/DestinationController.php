@@ -93,7 +93,8 @@ class DestinationController extends Controller
     
                 $destinationImage = new DestinationImage();
                 $destinationImage->destination_id = $destination->id;
-                $destinationImage->image = $name;
+                $destinationImage->image = env('APP_URL') . '/images/destinations/' . $name;
+
                 $destinationImage->save();
             }
         }

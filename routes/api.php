@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\User\ConfigController;
+use App\Http\Controllers\User\ContactController;
 use App\Http\Controllers\User\DestinationController;
 use App\Http\Controllers\User\ExpenseController;
 use App\Http\Controllers\User\LinkController;
@@ -53,3 +54,10 @@ Route::delete('/links-delete', [LinkController::class, 'destroy']);
 
 //Config router
 Route::get('/home-screen', [ConfigController::class, 'getHomeScreen']);
+
+
+//Contact router
+Route::post('/contacts', [ContactController::class, 'store']);
+
+//Destination router
+Route::get('/destinations', [DestinationController::class, 'getTopDestinations']);

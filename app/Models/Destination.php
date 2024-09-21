@@ -17,4 +17,9 @@ class Destination extends Model
     {
         return $this->hasMany(DestinationImage::class);
     }
+        public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
+
 }

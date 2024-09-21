@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//Login
+Route::get('/login', [DashboardController::class, 'showLoginForm'])->name('showLoginForm');
+Route::post('/login', [DashboardController::class, 'login'])->name('login');
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -45,3 +49,8 @@ Route::delete('/currencies/{id}', [CurrencyController::class, 'destroy'])->name(
 Route::get('/categories', [SampleCategoryController::class, 'index'])->name('sample');
 Route::get('/categories/create', [SampleCategoryController::class, 'create'])->name('sample.create');
 Route::post('/categories', [SampleCategoryController::class, 'store'])->name('sample.store');
+
+//Config
+Route::get('/config', [ConfigController::class, 'index'])->name('config');
+Route::put('/config-update/{id}', [ConfigController::class, 'update'])->name('config.update');
+
