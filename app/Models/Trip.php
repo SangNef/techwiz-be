@@ -22,4 +22,9 @@ class Trip extends Model
     {
         return $this->belongsTo(Destination::class);
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 }

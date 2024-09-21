@@ -51,12 +51,8 @@ class SampleCategoryController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-<<<<<<< HEAD
-        // Start a database transaction
-        DB::beginTransaction();
-=======
+
         \DB::beginTransaction();
->>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
         try {
             $sample = new Sample();
             $sample->name = $request->input('name');
@@ -91,21 +87,13 @@ class SampleCategoryController extends Controller
                 }
             }
 
-<<<<<<< HEAD
-            // Commit the transaction
-            DB::commit();
-=======
+
             \DB::commit();
->>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
 
             return redirect()->route('sample.index')->with('success', 'Sample and schedules created successfully.');
         } catch (\Exception $e) {
-<<<<<<< HEAD
-            // Rollback the transaction on error
-            DB::rollback();
-=======
+
             \DB::rollback();
->>>>>>> b16950f99102b38c8913fe434e1de0d85f758d51
             return back()->withErrors(['error' => 'An error occurred while saving the data.']);
         }
     }
