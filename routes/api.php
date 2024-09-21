@@ -37,6 +37,7 @@ Route::post('/create-trip', [TripController::class, 'store']);
 Route::get('/trips-show', [TripController::class, 'show']);
 Route::put('/trips-update', [TripController::class, 'update']);
 Route::delete('/trips-delete', [TripController::class, 'destroy']);
+
 //Expense router
 Route::get('/expenses', [ExpenseController::class, 'index']);
 Route::post('/expenses', [ExpenseController::class, 'store']);
@@ -56,8 +57,13 @@ Route::delete('/links-delete', [LinkController::class, 'destroy']);
 Route::get('/home-screen', [ConfigController::class, 'getHomeScreen']);
 
 
+
 //Contact router
 Route::post('/contacts', [ContactController::class, 'store']);
 
 //Destination router
 Route::get('/destinations', [DestinationController::class, 'getTopDestinations']);
+
+Route::get('/destination', [DestinationController::class, 'getDestination']);
+Route::get('/destination/{id}', [DestinationController::class, 'destinationDetail']);
+
