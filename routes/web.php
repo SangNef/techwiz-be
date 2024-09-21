@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CurrencyController;
@@ -53,4 +54,8 @@ Route::post('/categories', [SampleCategoryController::class, 'store'])->name('sa
 //Config
 Route::get('/config', [ConfigController::class, 'index'])->name('config');
 Route::put('/config-update/{id}', [ConfigController::class, 'update'])->name('config.update');
+
+//Admin 
+Route::get('/admins', [AdminController::class, 'index'])->name('admins');
+Route::put('/admins-update/{id}', [AdminController::class, 'update'])->name('admin.update');
 

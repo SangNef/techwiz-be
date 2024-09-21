@@ -62,16 +62,12 @@ Route::delete('/links-delete', [LinkController::class, 'destroy']);
 //Config router
 Route::get('/home-screen', [ConfigController::class, 'getHomeScreen']);
 
-
-
 //Contact router
 Route::post('/contacts', [ContactController::class, 'store']);
 
 //Destination router
-// Route::get('/destinations', [DestinationController::class, 'getTopDestinations']);
-
+Route::get('/destinations', [DestinationController::class, 'getTopDestinations']);
 Route::get('/destination', [DestinationController::class, 'getDestination']);
 Route::get('/destination/{id}', [DestinationController::class, 'destinationDetail']);
 
-//Currency router
 Route::get('/currency', [CurrencyController::class, 'getAllCurrency']);
