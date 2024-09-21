@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\User\ConfigController;
+use App\Http\Controllers\User\CurrencyController;
 use App\Http\Controllers\User\ContactController;
 use App\Http\Controllers\User\DestinationController;
 use App\Http\Controllers\User\ExpenseController;
@@ -35,8 +36,10 @@ Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/trips', [TripController::class, 'index']);
 Route::post('/create-trip', [TripController::class, 'store']);
 Route::get('/trips-show', [TripController::class, 'show']);
-Route::put('/trips-update', [TripController::class, 'update']);
+Route::put('/trip-update/{id}', [TripController::class, 'update']);
 Route::delete('/trips-delete', [TripController::class, 'destroy']);
+Route::get('/get-trip-by-user', [TripController::class, 'getTripByUser']);
+Route::get('/trip-detail/{id}', [TripController::class, 'tripDetail']);
 
 //Expense router
 Route::get('/expenses', [ExpenseController::class, 'index']);
@@ -55,6 +58,10 @@ Route::delete('/links-delete', [LinkController::class, 'destroy']);
 
 //Config router
 Route::get('/home-screen', [ConfigController::class, 'getHomeScreen']);
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 
 
 //Contact router
@@ -62,6 +69,15 @@ Route::post('/contacts', [ContactController::class, 'store']);
 
 //Destination router
 Route::get('/destinations', [DestinationController::class, 'getTopDestinations']);
+<<<<<<< HEAD
 Route::get('/destination', [DestinationController::class, 'getDestination']);
 Route::get('/destination/{id}', [DestinationController::class, 'destinationDetail']);
 // Admin router
+=======
+
+Route::get('/destination', [DestinationController::class, 'getDestination']);
+Route::get('/destination/{id}', [DestinationController::class, 'destinationDetail']);
+
+//Currency router
+Route::get('/currency', [CurrencyController::class, 'getAllCurrency']);
+>>>>>>> master

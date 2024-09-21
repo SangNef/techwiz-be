@@ -64,4 +64,17 @@ class DestinationController extends Controller
 
         return response()->json($result);
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+    public function destinationDetail($id)
+    {
+        $destination = Destination::with('images')->find($id);
+
+        return response()->json($destination);
+    }
+=======
+>>>>>>> master
+>>>>>>> master
 }
