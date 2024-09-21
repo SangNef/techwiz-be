@@ -54,7 +54,6 @@ class DestinationController extends Controller
 
         return response()->json($result);
     }
-<<<<<<< HEAD
 
     public function destinationDetail($id)
     {
@@ -62,7 +61,5 @@ class DestinationController extends Controller
 
         return response()->json($destination);
     }
-=======
->>>>>>> master
 }
 
