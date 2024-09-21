@@ -1880,6 +1880,10 @@ input:checked + .toggle-bg {
   --tw-text-opacity: 1;
   color: rgb(255 98 129 / var(--tw-text-opacity));
 }
+.group:hover .group-hover\:text-\[\#0f0c0d\] {
+  --tw-text-opacity: 1;
+  color: rgb(15 12 13 / var(--tw-text-opacity));
+}
 .dark\:border-blue-500:is(.dark *) {
   --tw-border-opacity: 1;
   border-color: rgb(63 131 248 / var(--tw-border-opacity));
