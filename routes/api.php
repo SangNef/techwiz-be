@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\User\ConfigController;
+<<<<<<< HEAD
 use App\Http\Controllers\User\CurrencyController;
+=======
+use App\Http\Controllers\User\ContactController;
+>>>>>>> master
 use App\Http\Controllers\User\DestinationController;
 use App\Http\Controllers\User\ExpenseController;
 use App\Http\Controllers\User\LinkController;
@@ -57,8 +61,20 @@ Route::delete('/links-delete', [LinkController::class, 'destroy']);
 
 //Config router
 Route::get('/home-screen', [ConfigController::class, 'getHomeScreen']);
+
+
+
+//Contact router
+Route::post('/contacts', [ContactController::class, 'store']);
+
+//Destination router
+Route::get('/destinations', [DestinationController::class, 'getTopDestinations']);
+
 Route::get('/destination', [DestinationController::class, 'getDestination']);
 Route::get('/destination/{id}', [DestinationController::class, 'destinationDetail']);
 
+<<<<<<< HEAD
 //Currency router
 Route::get('/currency', [CurrencyController::class, 'getAllCurrency']);
+=======
+>>>>>>> master

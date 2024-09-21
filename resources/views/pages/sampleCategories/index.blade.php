@@ -1,7 +1,7 @@
 @extends('layout.main')
 @section('content')
     <div class="flex justify-between my-6">
-        <h1 class="font-bold text-2xl leading-7">Trips List</h1>
+        <h1 class="font-bold text-2xl leading-7">Sample Category List</h1>
         <a href="{{ route('sample.create') }}"
             class="bg-pink-400 text-white px-4 py-1 rounded hover:bg-pink-500 duration-150 ease-in-out flex items-center gap-1 no-underline">
             <i class="fa-solid fa-plus"></i> Add new
