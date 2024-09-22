@@ -27,35 +27,31 @@ Route::post('/login', [DashboardController::class, 'login'])->name('login');
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-// Users
-Route::get('/users', [UserController::class, 'index'])->name('users');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
+Route::middleware(['admin'])->group(function () {
+    // Admin Routes
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
+    
+    Route::get('/trips', [TripController::class, 'index'])->name('trips');
 
-// Trips
-Route::get('/trips', [TripController::class, 'index'])->name('trips');
+    Route::get('/destinations', [DestinationController::class, 'index'])->name('destinations');
+    Route::post('/destinations', [DestinationController::class, 'store'])->name('destination.store');
+    Route::put('/destinations/{id}', [DestinationController::class, 'update'])->name('destination.update');
+    Route::delete('/destinations/{id}', [DestinationController::class, 'destroy'])->name('destination.destroy');
 
-// Destinations
-Route::get('/destinations', [DestinationController::class, 'index'])->name('destinations');
-Route::post('/destinations', [DestinationController::class, 'store'])->name('destination.store');
-Route::put('/destinations/{id}', [DestinationController::class, 'update'])->name('destination.update');
-Route::delete('/destinations/{id}', [DestinationController::class, 'destroy'])->name('destination.destroy');
+    Route::get('/currencies', [CurrencyController::class, 'index'])->name('currencies');
+    Route::post('/currencies', [CurrencyController::class, 'store'])->name('currency.store');
+    Route::put('/currencies/{id}', [CurrencyController::class, 'update'])->name('currency.update');
+    Route::delete('/currencies/{id}', [CurrencyController::class, 'destroy'])->name('currency.destroy');
 
-// Currencies
-Route::get('/currencies', [CurrencyController::class, 'index'])->name('currencies');
-Route::post('/currencies', [CurrencyController::class, 'store'])->name('currency.store');
-Route::put('/currencies/{id}', [CurrencyController::class, 'update'])->name('currency.update');
-Route::delete('/currencies/{id}', [CurrencyController::class, 'destroy'])->name('currency.destroy');
+    Route::get('/categories', [SampleCategoryController::class, 'index'])->name('sample');
+    Route::get('/categories/create', [SampleCategoryController::class, 'create'])->name('sample.create');
+    Route::post('/categories', [SampleCategoryController::class, 'store'])->name('sample.store');
 
-// Sample Categories
-Route::get('/categories', [SampleCategoryController::class, 'index'])->name('sample');
-Route::get('/categories/create', [SampleCategoryController::class, 'create'])->name('sample.create');
-Route::post('/categories', [SampleCategoryController::class, 'store'])->name('sample.store');
+    Route::get('/config', [ConfigController::class, 'index'])->name('config');
+    Route::put('/config-update/{id}', [ConfigController::class, 'update'])->name('config.update');
 
-//Config
-Route::get('/config', [ConfigController::class, 'index'])->name('config');
-Route::put('/config-update/{id}', [ConfigController::class, 'update'])->name('config.update');
-
-//Admin 
-Route::get('/admins', [AdminController::class, 'index'])->name('admins');
-Route::put('/admins-update/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('/admins', [AdminController::class, 'index'])->name('admins');
+    Route::put('/admins-update/{id}', [AdminController::class, 'update'])->name('admin.update');
+});
 
