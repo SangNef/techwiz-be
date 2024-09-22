@@ -48,20 +48,31 @@ class DestinationController extends Controller
                 $avg_amount_per_day_for_destination = $trip_count > 0 ? $total_amount_per_day / $trip_count : 0;
 
                 $result[] = [
-                    'destination_id' => $destination->id,
-                    'destination_name' => $destination->name,
-                    'avg_amount_per_day' => "Số tiền trung bình ngày: " . $avg_amount_per_day_for_destination, 
+                    'id' => $destination->id,
+                    'name' => $destination->name,
+                    'description' => $destination->description,
+                    'image' => env('APP_URL') . '/images/destinations/' . $destination->images->first()->image,
+                    'avg_amount' => $avg_amount_per_day_for_destination, 
                 ];
             } else {
                 $result[] = [
-                    'destination_id' => $destination->id,
-                    'destination_name' => $destination->name,
-                    'avg_amount_per_day' => 'NA',
+                    'id' => $destination->id,
+                    'name' => $destination->name,
+                    'description' => $destination->description,
+                    'image' => env('APP_URL') . '/images/destinations/' . $destination->images->first()->image,
+                    'avg_amount' => 'NA',
                     'trip_count' => 0,
                 ];
             }
         }
 
         return response()->json($result);
+    }
+
+    public function destinationDetail($id)
+    {
+        $destination = Destination::with('images')->find($id);
+
+        return response()->json($destination);
     }
 }

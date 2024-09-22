@@ -9,6 +9,7 @@ use App\Http\Controllers\User\ContactController;
 use App\Http\Controllers\User\DestinationController;
 use App\Http\Controllers\User\ExpenseController;
 use App\Http\Controllers\User\LinkController;
+use App\Http\Controllers\User\SampleController;
 use App\Http\Controllers\User\TripController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
@@ -40,9 +41,10 @@ Route::get('/trips', [TripController::class, 'index']);
 Route::post('/create-trip', [TripController::class, 'store']);
 Route::get('/trips-show', [TripController::class, 'show']);
 Route::put('/trip-update/{id}', [TripController::class, 'update']);
-Route::delete('/trips-delete', [TripController::class, 'destroy']);
+Route::delete('/trip-delete/{id}', [TripController::class, 'destroy']);
 Route::get('/get-trip-by-user', [TripController::class, 'getTripByUser']);
 Route::get('/trip-detail/{id}', [TripController::class, 'tripDetail']);
+Route::put('/trip-complete/{id}', [TripController::class, 'completeTrip']);
 
 //Expense router
 Route::get('/expenses', [ExpenseController::class, 'index']);
@@ -71,3 +73,6 @@ Route::get('/destination', [DestinationController::class, 'getDestination']);
 Route::get('/destination/{id}', [DestinationController::class, 'destinationDetail']);
 
 Route::get('/currency', [CurrencyController::class, 'getAllCurrency']);
+
+//Sample router
+Route::get('/samples', [SampleController::class, 'index']);
