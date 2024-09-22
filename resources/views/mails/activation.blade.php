@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Kích hoạt tài khoản</title>
+    <title>Active your account</title>
 </head>
-<body>
-    <h1>Xin chào,</h1>
-    <p>Vui lòng nhấp vào liên kết bên dưới để kích hoạt tài khoản của bạn:</p>
-    <a href="{{ $link }}">Kích hoạt tài khoản</a>
-    <p>Nếu bạn không yêu cầu kích hoạt, vui lòng bỏ qua email này.</p>
+<h1>Hello,</h1>
+
+    <p>Please click the link below to activate your account:</p>
+
+    <a href="{{ $link }}">Active</a>
+    <p>If you did not request activation, please ignore this email.</p>
 </body>
 </html>

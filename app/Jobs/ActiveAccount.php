@@ -27,7 +27,7 @@ class ActiveAccount implements ShouldQueue
 
         Mail::send('mails.activation', ['link' => $this->activationLink], function ($message) {
             $message->to($this->email)
-                    ->subject('Kích hoạt tài khoản');
+                    ->subject('Active your account');
         });
     }
 }

@@ -37,7 +37,7 @@ class TripController extends Controller
             'categories.*.schedules' => 'required|array',
             'categories.*.schedules.*.title' => 'nullable|string|max:255',
             'categories.*.schedules.*.day' => 'nullable|integer|min:1|max:31',
-            'categories.*.schedules.*.hour' => 'nullable|integer|min:0|max:23',
+            'categories.*.schedules.*.hour' => 'nullable',
         ]);
 
         if ($validator->fails()) {

@@ -11,7 +11,7 @@ class Destination extends Model
 
     protected $table = 'destinations';
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'deleted_at'];
 
     public function images()
     {

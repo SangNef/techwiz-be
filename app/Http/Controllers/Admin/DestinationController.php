@@ -13,7 +13,7 @@ class DestinationController extends Controller
     //
     public function index(Request $request)
     {
-        $query = Destination::with('images');
+        $query = Destination::with('images')->whereNull('deleted_at');
     
         if ($request->has('search')) {
             $search = $request->get('search');
@@ -105,7 +105,8 @@ class DestinationController extends Controller
     public function destroy($id)
     {
         $destination = Destination::find($id);
-        $destination->delete();
+        $destination->deleted_at = now();
+        $destination->save();
         return redirect()->back()->with('success', 'Destination deleted successfully');
     }
 }
