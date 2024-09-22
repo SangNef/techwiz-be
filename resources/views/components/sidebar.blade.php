@@ -23,8 +23,8 @@
         <li class="w-full hover:bg-pink-50 duration-150 py-2 hover:px-2 group"><a href="{{ route('sample') }}"
                 class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Samples Manager</a>
         </li>
-        <li class="w-full hover:bg-pink-50 duration-150 py-2 hover:px-2 group"><a href="{{ route('config') }}"
+        {{-- <li class="w-full hover:bg-pink-50 duration-150 py-2 hover:px-2 group"><a href="{{ route('config') }}"
                 class="block w-full leading-5 font-normal no-underline text-gray-500 group-hover:text-[#FF6281] rounded-md">Configs Manager</a>
-        </li>
+        </li> --}}
     </ul>
 </div>
