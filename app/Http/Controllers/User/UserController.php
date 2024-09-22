@@ -76,7 +76,7 @@ class UserController extends Controller
         $user = User::create($data);
 
         // Store email in cache for 1 hour
-        Cache::put('user_activation_' . $user->email, true, 60 * 60);
+        Cache::put('user_activation_' . $user->email, true, 60 * 10);
 
         // Send activation link
         $activationLink = route('user.activate', ['email' => $user->email]);
